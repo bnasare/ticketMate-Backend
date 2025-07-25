@@ -263,7 +263,7 @@ router.get('/profile', authenticate, getProfile);
 /**
  * @swagger
  * /api/auth/profile:
- *   put:
+ *   patch:
  *     summary: Update user profile
  *     tags: [User Profile]
  *     security:
@@ -311,7 +311,7 @@ router.get('/profile', authenticate, getProfile);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/profile', authenticate, updateProfile);
+router.patch('/profile', authenticate, updateProfile);
 
 /**
  * @swagger

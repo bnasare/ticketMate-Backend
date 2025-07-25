@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 require('dotenv').config();
 
 const connectDB = require('./config/database');
@@ -32,6 +34,31 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: API Health Check
+ *     description: Check if the API is running
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: API is running successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "TicketMate API is running!"
+ *                 version:
+ *                   type: string
+ *                   example: "1.0.0"
+ */
 app.get('/', (req, res) => {
   res.json({
     success: true,
@@ -40,6 +67,7 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/auth', authRoutes);
 
 // app.use('*', (req, res) => {

@@ -54,11 +54,22 @@ npm run dev
 - `POST /register` - Register a new user
 - `POST /login` - Login user
 - `GET /profile` - Get user profile (protected)
-- `PUT /profile` - Update user profile (protected)
+- `PATCH /profile` - Update user profile (protected)
 - `PATCH /preferences` - Update user preferences after onboarding (protected)
 - `POST /logout` - Logout user (protected)
 - `POST /forgot-password` - Send password reset email
 - `POST /reset-password` - Reset password with token
+
+### Event Routes (`/api/events`)
+
+- `GET /` - Get all published events
+- `GET /popular` - Get popular events
+- `GET /category/:category` - Get events by category (Music, Sports, Arts, Education, Food, Tech)
+- `GET /just-for-you` - Get personalized events based on user preferences (protected)
+- `GET /:id` - Get specific event by ID
+- `POST /` - Create new event (protected)
+- `PATCH /:id` - Update event (protected, owner/admin only)
+- `DELETE /:id` - Delete event (protected, owner/admin only)
 
 ### Request/Response Examples
 
@@ -143,7 +154,7 @@ Content-Type: application/json
 
 #### Update User Profile
 ```bash
-PUT /api/auth/profile
+PATCH /api/auth/profile
 Content-Type: application/json
 Authorization: Bearer <token>
 
@@ -156,29 +167,107 @@ Authorization: Bearer <token>
 }
 ```
 
+#### Create Event
+```bash
+POST /api/events
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "title": "KNUST Tech Conference 2024",
+  "description": "Annual technology conference featuring the latest innovations",
+  "category": "Tech",
+  "date": "2024-12-15T09:00:00.000Z",
+  "time": "09:00",
+  "location": "KNUST Great Hall",
+  "price": 50,
+  "maxAttendees": 500,
+  "isPopular": false,
+  "status": "published"
+}
+```
+
+#### Get Events by Category
+```bash
+GET /api/events/category/Music
+```
+
+#### Get Just For You Events (Personalized)
+```bash
+GET /api/events/just-for-you
+Authorization: Bearer <token>
+```
+
+#### Update Event
+```bash
+PATCH /api/events/507f1f77bcf86cd799439012
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "title": "Updated Event Title",
+  "price": 75,
+  "maxAttendees": 600
+}
+```
+
+## Swagger Documentation
+
+Interactive API documentation is available at `/api-docs` when the server is running:
+- **Local**: http://localhost:3001/api-docs
+- Complete API reference with request/response schemas
+- Try out endpoints directly from the browser
+
+## Current Status
+
+✅ **Working Features:**
+- User registration and authentication
+- JWT token-based authorization  
+- User profile management and preferences
+- Password reset functionality
+- Event CRUD operations
+- Event filtering by category
+- Popular events endpoint
+- Personalized event recommendations
+- MongoDB database integration
+- Swagger API documentation
+- Security middleware (helmet, cors, rate limiting)
+
 ## Project Structure
 
 ```
 backend/
+├── docs/                       # Generated API documentation
+│   ├── API_DOCUMENTATION.md   
+│   ├── api-docs.html
+│   └── swagger.json
+├── scripts/
+│   └── generate-docs.js        # Documentation generator
+├── seeds/
+│   └── eventSeeder.js          # Database seeding
 ├── src/
 │   ├── config/
-│   │   └── database.js          # MongoDB connection
+│   │   ├── database.js         # MongoDB connection
+│   │   └── swagger.js          # Swagger configuration
 │   ├── controllers/
-│   │   └── authController.js    # Authentication logic
+│   │   ├── authController.js   # Authentication logic
+│   │   └── eventController.js  # Event management logic
 │   ├── middleware/
-│   │   ├── auth.js             # JWT authentication middleware
-│   │   └── validation.js       # Input validation middleware
+│   │   ├── auth.js            # JWT authentication middleware
+│   │   └── validation.js      # Input validation middleware
 │   ├── models/
-│   │   └── User.js             # User schema
+│   │   ├── User.js            # User schema with preferences
+│   │   └── Event.js           # Event schema
 │   ├── routes/
-│   │   └── auth.js             # Auth routes
+│   │   ├── auth.js            # Authentication routes
+│   │   └── events.js          # Event routes
 │   ├── utils/
-│   │   └── jwt.js              # JWT utilities
-│   └── server.js               # Express server setup
-├── tests/                      # Test files (to be implemented)
-├── .env                        # Environment variables
-├── .gitignore                  # Git ignore file
-└── package.json               # Node.js dependencies
+│   │   └── jwt.js             # JWT utilities
+│   └── server.js              # Express server setup
+├── tests/                     # Test files (to be implemented)
+├── .env                       # Environment variables
+├── .gitignore                 # Git ignore file
+└── package.json              # Node.js dependencies
 ```
 
 ## Security Features
@@ -229,10 +318,14 @@ FRONTEND_URL=http://localhost:3000
 
 ## Next Steps
 
-- Implement event management endpoints
-- Add email verification
-- Add password reset functionality
+- ✅ ~~Implement event management endpoints~~ **COMPLETED**
+- ✅ ~~Add password reset functionality~~ **COMPLETED**  
+- ✅ ~~Add API documentation with Swagger~~ **COMPLETED**
+- Add email verification for user registration
 - Implement file upload for profile images
-- Add comprehensive testing
-- Add API documentation with Swagger
-```
+- Add comprehensive testing suite
+- Add event image upload functionality
+- Implement event booking/ticketing system
+- Add event search and filtering
+- Add real-time notifications
+- Implement event analytics and reporting

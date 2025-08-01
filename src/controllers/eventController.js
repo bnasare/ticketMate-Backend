@@ -213,6 +213,94 @@ const getPopularEvents = async (req, res) => {
   }
 };
 
+const getJustForYouEvents = async (req, res) => {
+  try {
+    const User = require('../models/User');
+    let preferenceBasedEvents = [];
+    let user = null;
+
+    if (req.user) {
+      user = await User.findById(req.user.id);
+    }
+
+    if (user && user.preferences && user.preferences.categories && user.preferences.categories.length > 0) {
+      const userCategories = user.preferences.categories.map(cat => {
+        const categoryMap = {
+          'Dance': 'Music',
+          'Tech Conference': 'Tech',
+          'International Events': 'Music',
+          'Festivals': 'Music',
+          'Games': 'Sports',
+          'Art': 'Arts',
+          'House Party': 'Music',
+          'Cooking': 'Food',
+          'Exhibition': 'Arts',
+          'Modelling': 'Arts',
+          'Gospel': 'Music',
+          'Car Showroom and Drifting': 'Sports'
+        };
+        return categoryMap[cat] || cat;
+      });
+
+      const uniqueCategories = [...new Set(userCategories)];
+
+      preferenceBasedEvents = await Event.find({ 
+        category: { $in: uniqueCategories },
+        status: 'published' 
+      })
+        .populate('createdBy', 'firstName lastName email')
+        .sort({ rating: -1, attendees: -1, createdAt: -1 });
+    }
+
+    if (preferenceBasedEvents.length < 5) {
+      const popularEvents = await Event.find({ 
+        isPopular: true,
+        status: 'published',
+        _id: { $nin: preferenceBasedEvents.map(event => event._id) }
+      })
+        .populate('createdBy', 'firstName lastName email')
+        .sort({ rating: -1, attendees: -1, createdAt: -1 });
+
+      preferenceBasedEvents = [...preferenceBasedEvents, ...popularEvents];
+    }
+
+    if (preferenceBasedEvents.length < 5) {
+      const additionalEvents = await Event.find({ 
+        status: 'published',
+        _id: { $nin: preferenceBasedEvents.map(event => event._id) }
+      })
+        .populate('createdBy', 'firstName lastName email')
+        .sort({ rating: -1, attendees: -1, createdAt: -1 });
+
+      preferenceBasedEvents = [...preferenceBasedEvents, ...additionalEvents];
+    }
+
+    const shuffleArray = (array) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    const shuffledEvents = shuffleArray(preferenceBasedEvents).slice(0, 5);
+
+    res.json({
+      success: true,
+      count: shuffledEvents.length,
+      data: shuffledEvents
+    });
+  } catch (error) {
+    console.error('Error fetching just for you events:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching just for you events',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getAllEvents,
   getEventsByCategory,
@@ -220,5 +308,6 @@ module.exports = {
   createEvent,
   updateEvent,
   deleteEvent,
-  getPopularEvents
+  getPopularEvents,
+  getJustForYouEvents
 };

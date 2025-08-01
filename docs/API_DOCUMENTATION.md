@@ -88,6 +88,32 @@ GET /api/events/{id}
 ```
 Returns a specific event by its ID.
 
+### Get Personalized Events (Auth Required)
+```http
+GET /api/events/just-for-you
+Authorization: Bearer {token}
+```
+Returns personalized events based on user preferences and interests. Uses user's category preferences, falls back to popular events, and shuffles results for variety.
+
+**Response Example:**
+```json
+{
+  "success": true,
+  "count": 5,
+  "data": [
+    {
+      "_id": "507f1f77bcf86cd799439012",
+      "title": "KNUST Tech Conference 2024",
+      "category": "Tech",
+      "isPopular": false,
+      "rating": "4.9",
+      "attendees": "300+",
+      "price": "GH₵50"
+    }
+  ]
+}
+```
+
 ### Create Event (Auth Required)
 ```http
 POST /api/events

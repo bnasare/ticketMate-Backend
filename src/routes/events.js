@@ -7,7 +7,8 @@ const {
   createEvent,
   updateEvent,
   deleteEvent,
-  getPopularEvents
+  getPopularEvents,
+  getJustForYouEvents
 } = require('../controllers/eventController');
 
 const { authenticate } = require('../middleware/auth');
@@ -191,7 +192,7 @@ router.post('/', authenticate, createEvent);
 /**
  * @swagger
  * /api/events/{id}:
- *   put:
+ *   patch:
  *     summary: Update an event
  *     description: Update an existing event (requires authentication and ownership)
  *     tags: [Events]
@@ -255,7 +256,7 @@ router.post('/', authenticate, createEvent);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', authenticate, updateEvent);
+router.patch('/:id', authenticate, updateEvent);
 
 /**
  * @swagger
@@ -313,5 +314,42 @@ router.put('/:id', authenticate, updateEvent);
  *               $ref: '#/components/schemas/Error'
  */
 router.delete('/:id', authenticate, deleteEvent);
+
+/**
+ * @swagger
+ * /api/events/just-for-you:
+ *   get:
+ *     summary: Get personalized events
+ *     description: Get events tailored to the user's preferences and interests
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Personalized events retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/EventsResponse'
+ *                 - type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: Events personalized based on your preferences
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.get('/just-for-you', authenticate, getJustForYouEvents);
 
 module.exports = router;

@@ -52,10 +52,18 @@ const validateRegister = [
 ];
 
 const validateLogin = [
-  body('email')
-    .isEmail()
-    .withMessage('Please provide a valid email')
-    .normalizeEmail(),
+  body('emailOrUsername')
+    .notEmpty()
+    .withMessage('Email or username is required')
+    .custom((value) => {
+      if (value.includes('@')) {
+        const { isEmail } = require('validator');
+        if (!isEmail(value)) {
+          throw new Error('Please provide a valid email');
+        }
+      }
+      return true;
+    }),
   body('password')
     .notEmpty()
     .withMessage('Password is required'),

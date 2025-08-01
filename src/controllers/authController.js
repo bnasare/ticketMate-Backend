@@ -52,9 +52,11 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { emailOrUsername, password } = req.body;
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ 
+      $or: [{ email: emailOrUsername }, { username: emailOrUsername }] 
+    }).select('+password');
     if (!user) {
       return res.status(401).json({
         success: false,

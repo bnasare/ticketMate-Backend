@@ -56,41 +56,40 @@
       },
       "User": {
         "type": "object",
-        "required": [
-          "firstName",
-          "lastName",
-          "email",
-          "username",
-          "password"
-        ],
         "properties": {
           "_id": {
             "type": "string",
+            "example": "507f1f77bcf86cd799439011",
             "description": "User ID"
           },
           "firstName": {
             "type": "string",
+            "example": "John",
             "maxLength": 50,
             "description": "User's first name"
           },
           "lastName": {
             "type": "string",
+            "example": "Doe",
             "maxLength": 50,
             "description": "User's last name"
           },
           "email": {
             "type": "string",
             "format": "email",
+            "example": "john.doe@example.com",
             "description": "User's email address"
           },
           "username": {
             "type": "string",
+            "example": "johndoe",
             "minLength": 3,
             "maxLength": 30,
             "description": "Unique username"
           },
           "phoneNumber": {
             "type": "string",
+            "example": "+233244123456",
             "description": "User's phone number"
           },
           "gender": {
@@ -101,14 +100,18 @@
               "other",
               "prefer-not-to-say"
             ],
+            "example": "male",
             "description": "User's gender"
           },
           "profileImage": {
             "type": "string",
+            "nullable": true,
+            "example": "https://example.com/avatar.jpg",
             "description": "URL to profile image"
           },
           "location": {
             "type": "string",
+            "example": "Accra, Ghana",
             "description": "User's location"
           },
           "preferences": {
@@ -178,10 +181,12 @@
           },
           "isOnline": {
             "type": "boolean",
+            "example": false,
             "description": "User's online status"
           },
           "isVerified": {
             "type": "boolean",
+            "example": true,
             "description": "Email verification status"
           },
           "role": {
@@ -190,6 +195,7 @@
               "user",
               "admin"
             ],
+            "example": "user",
             "description": "User role"
           },
           "createdAt": {
@@ -199,6 +205,462 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "username",
+          "password"
+        ]
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439012"
+          },
+          "title": {
+            "type": "string",
+            "example": "Pretty Girls Love Amapiano"
+          },
+          "date": {
+            "type": "string",
+            "example": "June 27th"
+          },
+          "time": {
+            "type": "string",
+            "example": "1:15 PM - 4:50 AM"
+          },
+          "location": {
+            "type": "string",
+            "example": "Accra"
+          },
+          "venue": {
+            "type": "string",
+            "example": "NO.5 Bar And Restaurant"
+          },
+          "price": {
+            "type": "string",
+            "example": "GH₵950"
+          },
+          "rating": {
+            "type": "string",
+            "example": "4.8"
+          },
+          "attendees": {
+            "type": "string",
+            "example": "4000+"
+          },
+          "image": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Music",
+              "Sports",
+              "Arts",
+              "Education",
+              "Food",
+              "Tech"
+            ],
+            "example": "Music"
+          },
+          "isPopular": {
+            "type": "boolean",
+            "example": true
+          },
+          "attendeeImages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            },
+            "example": [
+              "https://randomuser.me/api/portraits/men/32.jpg"
+            ]
+          },
+          "tickets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "VIP"
+                },
+                "price": {
+                  "type": "string",
+                  "example": "GH₵1500"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "VIP access with perks"
+                },
+                "available": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          },
+          "description": {
+            "type": "string",
+            "example": "Pretty Girls Love Amapiano is a music and dance event organised by the party invasion team of Ghana."
+          },
+          "organizer": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "AfroNation Events"
+              },
+              "avatar": {
+                "type": "string",
+                "format": "uri",
+                "example": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+              },
+              "isVerified": {
+                "type": "boolean",
+                "example": true
+              },
+              "followers": {
+                "type": "string",
+                "example": "2.5K"
+              },
+              "events": {
+                "type": "string",
+                "example": "12"
+              }
+            }
+          },
+          "coordinates": {
+            "type": "object",
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "example": 5.6037
+              },
+              "longitude": {
+                "type": "number",
+                "example": -0.187
+              }
+            }
+          },
+          "createdBy": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published",
+              "cancelled"
+            ],
+            "example": "published"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EventInput": {
+        "type": "object",
+        "required": [
+          "title",
+          "date",
+          "time",
+          "location",
+          "venue",
+          "price",
+          "image",
+          "category",
+          "description"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "Amazing Music Festival"
+          },
+          "date": {
+            "type": "string",
+            "example": "December 25th"
+          },
+          "time": {
+            "type": "string",
+            "example": "7:00 PM - 11:00 PM"
+          },
+          "location": {
+            "type": "string",
+            "example": "Accra"
+          },
+          "venue": {
+            "type": "string",
+            "example": "National Theatre"
+          },
+          "price": {
+            "type": "string",
+            "example": "GH₵500"
+          },
+          "image": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://example.com/event-image.jpg"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Music",
+              "Sports",
+              "Arts",
+              "Education",
+              "Food",
+              "Tech"
+            ],
+            "example": "Music"
+          },
+          "description": {
+            "type": "string",
+            "example": "A fantastic music event with top artists"
+          },
+          "isPopular": {
+            "type": "boolean",
+            "example": false
+          },
+          "attendeeImages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "tickets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "General"
+                },
+                "price": {
+                  "type": "string",
+                  "example": "GH₵500"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "General admission"
+                },
+                "available": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          },
+          "organizer": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Event Organizers Ghana"
+              },
+              "avatar": {
+                "type": "string",
+                "format": "uri"
+              },
+              "isVerified": {
+                "type": "boolean",
+                "example": false
+              },
+              "followers": {
+                "type": "string",
+                "example": "1K"
+              },
+              "events": {
+                "type": "string",
+                "example": "5"
+              }
+            }
+          },
+          "coordinates": {
+            "type": "object",
+            "properties": {
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "UserRegister": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "username",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "Doe"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "johndoe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6,
+            "example": "password123"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "+233244123456"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female",
+              "other",
+              "prefer-not-to-say"
+            ],
+            "example": "male"
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": [
+          "emailOrUsername",
+          "password"
+        ],
+        "properties": {
+          "emailOrUsername": {
+            "type": "string",
+            "example": "johndoe"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Login successful"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "$ref": "#/components/schemas/User"
+              },
+              "token": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              }
+            }
+          }
+        }
+      },
+      "EventsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "count": {
+            "type": "number",
+            "example": 10
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            }
+          }
+        }
+      },
+      "EventResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/Event"
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "required": [
+          "token",
+          "newPassword"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "abc123def456"
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 6,
+            "example": "newpassword123"
           }
         }
       }
@@ -791,6 +1253,470 @@
           },
           "400": {
             "description": "Invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events": {
+      "get": {
+        "summary": "Get all events",
+        "description": "Retrieve all published events from the database",
+        "tags": [
+          "Events"
+        ],
+        "responses": {
+          "200": {
+            "description": "Events retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new event",
+        "description": "Create a new event (requires authentication)",
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Event created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/EventResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Event created successfully"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/popular": {
+      "get": {
+        "summary": "Get popular events",
+        "description": "Retrieve all events marked as popular",
+        "tags": [
+          "Events"
+        ],
+        "responses": {
+          "200": {
+            "description": "Popular events retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/category/{category}": {
+      "get": {
+        "summary": "Get events by category",
+        "description": "Retrieve all events in a specific category",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "category",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Music",
+                "Sports",
+                "Arts",
+                "Education",
+                "Food",
+                "Tech"
+              ]
+            },
+            "description": "The event category",
+            "example": "Music"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Events retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/EventsResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "category": {
+                          "type": "string",
+                          "example": "Music"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/{id}": {
+      "get": {
+        "summary": "Get event by ID",
+        "description": "Retrieve a specific event by its ID",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The event ID",
+            "example": "507f1f77bcf86cd799439012"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an event",
+        "description": "Update an existing event (requires authentication and ownership)",
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The event ID",
+            "example": "507f1f77bcf86cd799439012"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Event updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/EventResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Event updated successfully"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not authorized to update this event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an event",
+        "description": "Delete an existing event (requires authentication and ownership)",
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The event ID",
+            "example": "507f1f77bcf86cd799439012"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Success"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Event deleted successfully"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not authorized to delete this event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicketMate API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.10.3/swagger-ui.css" />
+    <style>
+        html {
+            box-sizing: border-box;
+            overflow: -moz-scrollbars-vertical;
+            overflow-y: scroll;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        body {
+            margin:0;
+            background: #fafafa;
+        }
+        .swagger-ui .topbar {
+            background-color: #1f2937;
+        }
+        .swagger-ui .topbar .download-url-wrapper {
+            display: none;
+        }
+        .custom-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .custom-header h1 {
+            margin: 0 0 1rem 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        .custom-header p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .api-info {
+            max-width: 1200px;
+            margin: 0 auto 2rem auto;
+            padding: 0 2rem;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .info-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .info-card h3 {
+            margin-top: 0;
+            color: #1f2937;
+        }
+        .endpoint-list {
+            list-style: none;
+            padding: 0;
+        }
+        .endpoint-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .endpoint-list li:last-child {
+            border-bottom: none;
+        }
+        .method {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .method.get { background: #10b981; color: white; }
+        .method.post { background: #3b82f6; color: white; }
+        .method.put { background: #f59e0b; color: white; }
+        .method.delete { background: #ef4444; color: white; }
+        .method.patch { background: #8b5cf6; color: white; }
+    </style>
+</head>
+<body>
+    <div class="custom-header">
+        <h1>🎫 TicketMate API</h1>
+        <p>Complete API documentation for the TicketMate event management platform</p>
+    </div>
+    
+    <div class="api-info">
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>🚀 Base URLs</h3>
+                <ul>
+                    <li><strong>Production:</strong> https://ticketmate-backend.onrender.com</li>
+                    <li><strong>Development:</strong> http://localhost:3000</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🔐 Authentication</h3>
+                <p>The API uses JWT Bearer tokens for authentication. Include the token in the Authorization header:</p>
+                <code>Authorization: Bearer your_jwt_token_here</code>
+            </div>
+            
+            <div class="info-card">
+                <h3>📊 Response Format</h3>
+                <p>All API responses follow a consistent format:</p>
+                <pre>{
+  "success": true,
+  "message": "Description",
+  "data": { ... }
+}</pre>
+            </div>
+        </div>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>🎉 Event Endpoints</h3>
+                <ul class="endpoint-list">
+                    <li><span class="method get">GET</span> /api/events - Get all events</li>
+                    <li><span class="method get">GET</span> /api/events/popular - Get popular events</li>
+                    <li><span class="method get">GET</span> /api/events/category/{category} - Get events by category</li>
+                    <li><span class="method get">GET</span> /api/events/{id} - Get event by ID</li>
+                    <li><span class="method post">POST</span> /api/events - Create event (Auth required)</li>
+                    <li><span class="method put">PUT</span> /api/events/{id} - Update event (Auth required)</li>
+                    <li><span class="method delete">DELETE</span> /api/events/{id} - Delete event (Auth required)</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>👤 Authentication Endpoints</h3>
+                <ul class="endpoint-list">
+                    <li><span class="method post">POST</span> /api/auth/register - Register new user</li>
+                    <li><span class="method post">POST</span> /api/auth/login - Login user</li>
+                    <li><span class="method get">GET</span> /api/auth/profile - Get user profile</li>
+                    <li><span class="method patch">PATCH</span> /api/auth/profile - Update profile</li>
+                    <li><span class="method patch">PATCH</span> /api/auth/preferences - Update preferences</li>
+                    <li><span class="method post">POST</span> /api/auth/logout - Logout user</li>
+                    <li><span class="method post">POST</span> /api/auth/forgot-password - Request password reset</li>
+                    <li><span class="method post">POST</span> /api/auth/reset-password - Reset password</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="info-card">
+            <h3>📂 Event Categories</h3>
+            <p>Available event categories: <strong>Music</strong>, <strong>Sports</strong>, <strong>Arts</strong>, <strong>Education</strong>, <strong>Food</strong>, <strong>Tech</strong></p>
+        </div>
+    </div>
+
+    <div id="swagger-ui"></div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@5.10.3/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.10.3/swagger-ui-standalone-preset.js"></script>
+    <script>
+        window.onload = function() {
+            const ui = SwaggerUIBundle({
+                url: './swagger.json',
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                tryItOutEnabled: true,
+                requestInterceptor: (request) => {
+                    // Add any custom headers or modify requests here
+                    return request;
+                },
+                responseInterceptor: (response) => {
+                    // Handle responses here
+                    return response;
+                }
+            });
+        };
+    </script>
+</body>
+</html>

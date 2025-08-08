@@ -20,12 +20,12 @@ class PaystackService {
           email: transactionData.email,
           amount: transactionData.amount * 100,
           reference: transactionData.reference,
-          callback_url: transactionData.callback_url,
+          // callback_url: transactionData.callback_url,
           metadata: {
             ...transactionData.metadata,
-            cancel_action: transactionData.callback_url
+            // cancel_action: transactionData.callback_url
           },
-          channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money'],
+          channels: ['mobile_money'],
           currency: 'GHS'
         },
         {

@@ -14,7 +14,7 @@ const bookingSchema = new mongoose.Schema({
   tickets: [{
     type: {
       type: String,
-      enum: ['regular', 'vip'],
+      enum: ['regular', 'vip', 'Regular', 'VIP'],
       required: true
     },
     quantity: {

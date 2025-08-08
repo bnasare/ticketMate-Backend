@@ -25,7 +25,7 @@ class PaystackService {
             ...transactionData.metadata,
             cancel_action: transactionData.callback_url
           },
-          channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money'],
+          channels: ['mobile_money'],
           currency: 'GHS'
         },
         {

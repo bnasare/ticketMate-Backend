@@ -4,6 +4,11 @@ const Event = require('../models/Event');
 const User = require('../models/User');
 
 const initializePayment = async (req, res) => {
+  console.log('=== PAYMENT INITIALIZATION STARTED ===');
+  console.log('Request body:', JSON.stringify(req.body, null, 2));
+  console.log('Auth header:', req.headers.authorization);
+  console.log('User object:', req.user);
+  
   try {
     const {
       eventId,
@@ -72,8 +77,16 @@ const initializePayment = async (req, res) => {
 
     const paymentReference = paystackService.generateReference();
     
+    if (!req.user || (!req.user._id && !req.user.id)) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required - user not found'
+      });
+    }
+    
+    const userId = req.user._id || req.user.id;
     const booking = new Booking({
-      user: req.user?.id,
+      user: req.user._id,
       event: eventId,
       tickets: processedTickets,
       totalAmount,
@@ -88,7 +101,7 @@ const initializePayment = async (req, res) => {
 
     await booking.save();
 
-    const callbackUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/payment/callback`;
+    const callbackUrl = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/payment/callback`;
     
     const transactionData = {
       email: customerEmail,
@@ -116,6 +129,7 @@ const initializePayment = async (req, res) => {
         success: true,
         message: 'Payment initialized successfully',
         data: {
+          userId: req.user._id,
           bookingId: booking._id,
           reference: paymentReference,
           paystackReference: paystackResponse.data.reference,
@@ -145,7 +159,7 @@ const initializePayment = async (req, res) => {
     console.error('Payment initialization error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to initialize payment',
+      message: 'Failed nigga!',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }

@@ -23,7 +23,7 @@ const {
  *       properties:
  *         type:
  *           type: string
- *           enum: [regular, vip]
+ *           enum: [regular, vip, Regular, VIP]
  *           description: Type of ticket
  *         quantity:
  *           type: integer
@@ -167,12 +167,13 @@ const {
  */
 router.post(
   '/initialize',
+  auth,
   [
     body('eventId').notEmpty().withMessage('Event ID is required'),
     body('tickets').isArray({ min: 1 }).withMessage('At least one ticket is required'),
-    body('tickets.*.type').isIn(['regular', 'vip']).withMessage('Ticket type must be regular or vip'),
+    body('tickets.*.type').isIn(['regular', 'vip', 'Regular', 'VIP']).withMessage('Ticket type must be regular, vip, Regular, or VIP'),
     body('tickets.*.quantity').isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
-    body('paymentMethod').isIn(['mobile_money', 'card', 'bank_transfer']).withMessage('Invalid payment method'),
+    body('paymentMethod').isIn(['card', 'bank', 'mobile_money', 'bank_transfer', 'ussd', 'qr', 'eft']).withMessage('Invalid payment method'),
     body('customerEmail').isEmail().withMessage('Valid email is required'),
     body('customerName').trim().notEmpty().withMessage('Customer name is required'),
     body('customerPhone').optional().isMobilePhone().withMessage('Invalid phone number')

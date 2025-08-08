@@ -101,13 +101,13 @@ const initializePayment = async (req, res) => {
 
     await booking.save();
 
-    const callbackUrl = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/payment/callback`;
+    // const callbackUrl = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/payment/callback`;
     
     const transactionData = {
       email: customerEmail,
       amount: totalAmount,
       reference: paymentReference,
-      callback_url: callbackUrl,
+      // callback_url: callbackUrl,
       metadata: {
         bookingId: booking._id.toString(),
         eventId: eventId,

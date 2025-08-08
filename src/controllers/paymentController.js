@@ -73,7 +73,7 @@ const initializePayment = async (req, res) => {
     const paymentReference = paystackService.generateReference();
     
     const booking = new Booking({
-      user: req.user?.id,
+      user: req.user?.userId,
       event: eventId,
       tickets: processedTickets,
       totalAmount,

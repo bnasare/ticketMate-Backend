@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const auth = require('../middleware/auth');
-const { validate } = require('../middleware/validation');
+const { authenticate: auth } = require('../middleware/auth');
+const { handleValidationErrors } = require('../middleware/validation');
 const {
   initializePayment,
   verifyPayment,
@@ -177,7 +177,7 @@ router.post(
     body('customerName').trim().notEmpty().withMessage('Customer name is required'),
     body('customerPhone').optional().isMobilePhone().withMessage('Invalid phone number')
   ],
-  validate,
+  handleValidationErrors,
   initializePayment
 );
 
@@ -247,7 +247,7 @@ router.get('/verify/:reference', verifyPayment);
  *       500:
  *         description: Webhook processing failed
  */
-router.post('/webhook', express.raw({ type: 'application/json' }), handleWebhook);
+router.post('/webhook', handleWebhook);
 
 /**
  * @swagger

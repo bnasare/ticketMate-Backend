@@ -111,8 +111,15 @@ const initializePayment = async (req, res) => {
         });
       }
 
-      const ticketPrice = parseFloat(eventTicket.price.replace(/[^\d.]/g, ''));
+      const ticketPrice = parseFloat(eventTicket.price.replace(/[^\d.]/g, '')) || 0;
       const ticketTotal = ticketPrice * ticket.quantity;
+      
+      console.log('=== TICKET PRICE DEBUG ===');
+      console.log('Original price string:', eventTicket.price);
+      console.log('Parsed price:', ticketPrice);
+      console.log('Ticket quantity:', ticket.quantity);
+      console.log('Ticket total:', ticketTotal);
+      console.log('=== END TICKET PRICE DEBUG ===');
       
       totalAmount += ticketTotal;
       totalTickets += ticket.quantity;
@@ -122,6 +129,62 @@ const initializePayment = async (req, res) => {
         quantity: ticket.quantity,
         price: ticketPrice,
         includesFriends: ticket.includesFriends || false
+      });
+    }
+
+    console.log('=== TOTAL AMOUNT CHECK ===');
+    console.log('Total amount:', totalAmount);
+    console.log('=== END AMOUNT CHECK ===');
+
+    // Handle free tickets - don't process payment through Paystack
+    if (totalAmount === 0) {
+      const paymentReference = paystackService.generateReference();
+      
+      if (!req.user || (!req.user._id && !req.user.id)) {
+        return res.status(401).json({
+          success: false,
+          message: 'Authentication required - user not found'
+        });
+      }
+      
+      const userId = req.user._id || req.user.id;
+      const booking = new Booking({
+        user: req.user._id,
+        event: eventId,
+        tickets: processedTickets,
+        totalAmount,
+        totalTickets,
+        paymentReference,
+        paymentMethod: 'free',
+        customerEmail,
+        customerName,
+        customerPhone,
+        paymentStatus: 'success',
+        paymentDate: new Date()
+      });
+
+      booking.generateTicketNumbers();
+      booking.generateQRCode();
+      await booking.save();
+
+      return res.status(200).json({
+        success: true,
+        message: 'Free tickets booked successfully',
+        data: {
+          userId: req.user._id,
+          bookingId: booking._id,
+          reference: paymentReference,
+          totalAmount: totalAmount,
+          totalTickets: totalTickets,
+          tickets: booking.ticketNumbers,
+          qrCode: booking.qrCode,
+          event: {
+            id: event._id,
+            title: event.title,
+            date: event.date,
+            venue: event.venue
+          }
+        }
       });
     }
 
@@ -169,6 +232,10 @@ const initializePayment = async (req, res) => {
       }
     };
 
+    console.log('=== PAYSTACK TRANSACTION DATA ===');
+    console.log('Transaction data:', JSON.stringify(transactionData, null, 2));
+    console.log('=== END TRANSACTION DATA ===');
+    
     const paystackResponse = await paystackService.initializeTransaction(transactionData);
 
     if (paystackResponse.status) {
@@ -206,10 +273,18 @@ const initializePayment = async (req, res) => {
     }
 
   } catch (error) {
-    console.error('Payment initialization error:', error);
+    console.error('=== PAYMENT INITIALIZATION ERROR ===');
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    }
+    console.error('=== END ERROR DEBUG ===');
+    
     res.status(500).json({
       success: false,
-      message: 'Failed nigga!',
+      message: 'Payment initialization failed',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }

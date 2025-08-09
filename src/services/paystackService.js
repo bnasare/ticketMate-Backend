@@ -14,11 +14,19 @@ class PaystackService {
 
   async initializeTransaction(transactionData) {
     try {
+      // Paystack requires minimum amount of 1 Ghana Cedi (100 pesewas)
+      const amountInPesewas = Math.max(transactionData.amount * 100, 100);
+      
+      console.log('=== PAYSTACK SERVICE DEBUG ===');
+      console.log('Original amount:', transactionData.amount);
+      console.log('Amount in pesewas:', amountInPesewas);
+      console.log('=== END PAYSTACK SERVICE DEBUG ===');
+      
       const response = await axios.post(
         `${this.baseURL}/transaction/initialize`,
         {
           email: transactionData.email,
-          amount: transactionData.amount * 100,
+          amount: amountInPesewas,
           reference: transactionData.reference,
           // callback_url: transactionData.callback_url,
           metadata: {
@@ -39,6 +47,7 @@ class PaystackService {
       return response.data;
     } catch (error) {
       console.error('Paystack initialization error:', error.response?.data || error.message);
+      console.error('Full error object:', error);
       throw new Error(
         error.response?.data?.message || 'Failed to initialize payment'
       );

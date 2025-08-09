@@ -111,7 +111,14 @@ const initializePayment = async (req, res) => {
         });
       }
 
-      const ticketPrice = parseFloat(eventTicket.price.replace(/[^\d.]/g, '')) || 0;
+      // Better price parsing that handles "Free" tickets explicitly
+      let ticketPrice = 0;
+      if (eventTicket.price && eventTicket.price.toLowerCase().includes('free')) {
+        ticketPrice = 0;
+      } else {
+        const numericPart = eventTicket.price.replace(/[^\d.]/g, '');
+        ticketPrice = numericPart ? parseFloat(numericPart) : 0;
+      }
       const ticketTotal = ticketPrice * ticket.quantity;
       
       console.log('=== TICKET PRICE DEBUG ===');
@@ -134,6 +141,8 @@ const initializePayment = async (req, res) => {
 
     console.log('=== TOTAL AMOUNT CHECK ===');
     console.log('Total amount:', totalAmount);
+    console.log('Total tickets:', totalTickets);
+    console.log('Is free tickets:', totalAmount === 0);
     console.log('=== END AMOUNT CHECK ===');
 
     // Handle free tickets - don't process payment through Paystack

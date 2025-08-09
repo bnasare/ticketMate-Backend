@@ -41,6 +41,13 @@ const initializePayment = async (req, res) => {
       });
     }
 
+    console.log('=== EVENT DEBUG INFO ===');
+    console.log('Event ID:', eventId);
+    console.log('Event title:', event.title);
+    console.log('Event tickets:', JSON.stringify(event.tickets, null, 2));
+    console.log('Number of tickets in event:', event.tickets ? event.tickets.length : 0);
+    console.log('=== END EVENT DEBUG INFO ===');
+
     let totalAmount = 0;
     let totalTickets = 0;
     const processedTickets = [];
@@ -53,11 +60,54 @@ const initializePayment = async (req, res) => {
         });
       }
 
-      const eventTicket = event.tickets.find(t => t.type.toLowerCase() === ticket.type.toLowerCase());
+      console.log('=== TICKET MATCHING DEBUG ===');
+      console.log('Looking for ticket type:', ticket.type);
+      console.log('Available ticket types:', event.tickets ? event.tickets.map(t => t.type) : 'No tickets array');
+      console.log('Event tickets array:', event.tickets);
+      console.log('Doing case-insensitive comparison...');
+      
+      // More flexible ticket matching - try multiple approaches
+      let eventTicket = null;
+      
+      if (event.tickets && Array.isArray(event.tickets)) {
+        // First try exact case-insensitive match
+        eventTicket = event.tickets.find(t => {
+          const match = t.type && t.type.toLowerCase() === ticket.type.toLowerCase();
+          console.log(`Comparing "${t.type}" (${t.type?.toLowerCase()}) === "${ticket.type}" (${ticket.type.toLowerCase()}): ${match}`);
+          return match;
+        });
+        
+        // If no match, try partial matching
+        if (!eventTicket) {
+          console.log('Exact match failed, trying partial matching...');
+          eventTicket = event.tickets.find(t => {
+            if (!t.type) return false;
+            const eventTypeNormalized = t.type.toLowerCase().trim();
+            const requestTypeNormalized = ticket.type.toLowerCase().trim();
+            const partialMatch = eventTypeNormalized.includes(requestTypeNormalized) || 
+                               requestTypeNormalized.includes(eventTypeNormalized);
+            console.log(`Partial match "${eventTypeNormalized}" vs "${requestTypeNormalized}": ${partialMatch}`);
+            return partialMatch;
+          });
+        }
+        
+        // If still no match, try first ticket as fallback for "regular" type
+        if (!eventTicket && ticket.type.toLowerCase().includes('regular') && event.tickets.length > 0) {
+          console.log('No match found, using first ticket as fallback for regular type');
+          eventTicket = event.tickets[0];
+        }
+      }
+      
+      console.log('Found matching ticket:', eventTicket ? 'YES' : 'NO');
+      if (eventTicket) {
+        console.log('Matched ticket:', eventTicket);
+      }
+      console.log('=== END TICKET MATCHING DEBUG ===');
+      
       if (!eventTicket) {
         return res.status(400).json({
           success: false,
-          message: `Ticket type "${ticket.type}" not found for this event`
+          message: `Ticket type "${ticket.type}" not found for this event. Available types: ${event.tickets ? event.tickets.map(t => t.type).join(', ') : 'none'}`
         });
       }
 
